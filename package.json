@@ -1,0 +1,13 @@
+{
+  "name": "millio",
+  "version": "1.0.0",
+  "description": "The verified growth club and milestone tracker for indie hackers.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}
