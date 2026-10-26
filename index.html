@@ -1,28 +1,291 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tic Tac Toe</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Millio — The Verified Growth Club for Indie Hackers</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        dark: {
+                            900: '#09090b',
+                            800: '#121216',
+                            700: '#1c1c24',
+                            600: '#272732',
+                        },
+                        accent: {
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Tic Tac Toe</h1>
-        <div id="status" class="status">Player X's turn</div>
-        <div class="board" id="board">
-            <div class="cell" data-index="0"></div>
-            <div class="cell" data-index="1"></div>
-            <div class="cell" data-index="2"></div>
-            <div class="cell" data-index="3"></div>
-            <div class="cell" data-index="4"></div>
-            <div class="cell" data-index="5"></div>
-            <div class="cell" data-index="6"></div>
-            <div class="cell" data-index="7"></div>
-            <div class="cell" data-index="8"></div>
-        </div>
-        <button id="restart">Restart Game</button>
+<body class="bg-dark-900 text-gray-100 antialiased selection:bg-accent-500 selection:text-white" x-data="{ currentTab: 'dashboard', sidebarOpen: true }">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside :class="sidebarOpen ? 'w-64' : 'w-20'" class="bg-dark-800 border-r border-dark-700 transition-all duration-300 flex flex-col z-20">
+            <!-- Logo area -->
+            <div class="h-16 flex items-center px-6 border-b border-dark-700 justify-between">
+                <div class="flex items-center space-x-3 overflow-hidden">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-accent-500 to-indigo-400 flex items-center justify-center font-bold text-white shadow-lg shadow-accent-500/20 shrink-0">M</div>
+                    <span class="font-bold text-lg tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent" x-show="sidebarOpen">Millio</span>
+                </div>
+                <button @click="sidebarOpen = !sidebarOpen" class="text-gray-400 hover:text-white transition">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 px-3 py-6 space-y-1.5">
+                <a @click="currentTab = 'dashboard'" :class="currentTab === 'dashboard' ? 'bg-accent-500/10 text-accent-500 font-semibold' : 'text-gray-400 hover:bg-dark-700 hover:text-white'" class="flex items-center px-3 py-2.5 rounded-xl transition cursor-pointer group">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+                    <span class="ml-3 text-sm" x-show="sidebarOpen">Dashboard</span>
+                </a>
+
+                <a @click="currentTab = 'leaderboard'" :class="currentTab === 'leaderboard' ? 'bg-accent-500/10 text-accent-500 font-semibold' : 'text-gray-400 hover:bg-dark-700 hover:text-white'" class="flex items-center px-3 py-2.5 rounded-xl transition cursor-pointer group">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                    <span class="ml-3 text-sm" x-show="sidebarOpen">Leaderboard</span>
+                </a>
+
+                <a @click="currentTab = 'perks'" :class="currentTab === 'perks' ? 'bg-accent-500/10 text-accent-500 font-semibold' : 'text-gray-400 hover:bg-dark-700 hover:text-white'" class="flex items-center px-3 py-2.5 rounded-xl transition cursor-pointer group">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span class="ml-3 text-sm" x-show="sidebarOpen">Perks Club</span>
+                </a>
+
+                <a @click="currentTab = 'analytics'" :class="currentTab === 'analytics' ? 'bg-accent-500/10 text-accent-500 font-semibold' : 'text-gray-400 hover:bg-dark-700 hover:text-white'" class="flex items-center px-3 py-2.5 rounded-xl transition cursor-pointer group">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    <span class="ml-3 text-sm" x-show="sidebarOpen">Analytics</span>
+                </a>
+
+                <a @click="currentTab = 'settings'" :class="currentTab === 'settings' ? 'bg-accent-500/10 text-accent-500 font-semibold' : 'text-gray-400 hover:bg-dark-700 hover:text-white'" class="flex items-center px-3 py-2.5 rounded-xl transition cursor-pointer group">
+                    <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <span class="ml-3 text-sm" x-show="sidebarOpen">Settings</span>
+                </a>
+            </nav>
+
+            <!-- User footer -->
+            <div class="p-4 border-t border-dark-700 flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-full bg-accent-500/20 text-accent-500 flex items-center font-semibold justify-center shrink-0">AA</div>
+                <div class="overflow-hidden" x-show="sidebarOpen">
+                    <p class="text-sm font-medium text-white truncate">Arayan Ahmed</p>
+                    <p class="text-xs text-gray-400 truncate">arayan@troveai.site</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col overflow-y-auto bg-dark-900">
+            
+            <!-- Top Header -->
+            <header class="h-16 border-b border-dark-700 flex items-center justify-between px-8 bg-dark-800/50 backdrop-blur sticky top-0 z-10">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-lg font-bold text-white capitalize" x-text="currentTab"></h1>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Stripe Connected</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button class="bg-dark-700 hover:bg-dark-600 text-gray-300 px-3.5 py-2 rounded-xl text-xs font-medium transition border border-dark-600">Export Report</button>
+                    <button class="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-xl text-xs font-semibold transition shadow-lg shadow-accent-500/25">Verify Milestone</button>
+                </div>
+            </header>
+
+            <!-- Dynamic Views -->
+            <div class="p-8 max-w-7xl mx-auto w-full space-y-8">
+                
+                <!-- DASHBOARD TAB -->
+                <div x-show="currentTab === 'dashboard'" class="space-y-8">
+                    <!-- Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                        <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl shadow-sm">
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Verified MRR</p>
+                            <p class="text-3xl font-extrabold text-white mt-2">$12,450</p>
+                            <span class="text-xs text-emerald-400 font-semibold mt-2 inline-flex items-center">↑ 18% this month</span>
+                        </div>
+                        <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl shadow-sm">
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Active Subscribers</p>
+                            <p class="text-3xl font-extrabold text-white mt-2">642</p>
+                            <span class="text-xs text-emerald-400 font-semibold mt-2 inline-flex items-center">↑ 34 new today</span>
+                        </div>
+                        <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl shadow-sm">
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Milestone Tier</p>
+                            <p class="text-3xl font-extrabold text-indigo-400 mt-2">$10k Club</p>
+                            <span class="text-xs text-gray-400 mt-2 block">Next: $50k Club</span>
+                        </div>
+                        <div class="bg-dark-800 border border-dark-700 p-6 rounded-2xl shadow-sm">
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wider">Perks Unlocked</p>
+                            <p class="text-3xl font-extrabold text-white mt-2">14 / 20</p>
+                            <span class="text-xs text-accent-500 font-semibold mt-2 inline-flex items-center">View perks →</span>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity / Verification Card -->
+                    <div class="bg-dark-800 border border-dark-700 rounded-2xl p-6">
+                        <h3 class="text-base font-semibold text-white mb-4">Recent Verified Events</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between py-3 border-b border-dark-700">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">✓</div>
+                                    <div>
+                                        <p class="text-sm font-medium text-white">Crossed $10k MRR threshold</p>
+                                        <p class="text-xs text-gray-400">Verified via Stripe API sync</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-gray-400">2 hours ago</span>
+                            </div>
+                            <div class="flex items-center justify-between py-3 border-b border-dark-700">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 rounded-full bg-accent-500/20 text-accent-500 flex items-center justify-center font-bold text-xs">★</div>
+                                    <div>
+                                        <p class="text-sm font-medium text-white">Unlocked AWS $5,000 Credits Perk</p>
+                                        <p class="text-xs text-gray-400">Added to your founder vault</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs text-gray-400">Yesterday</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LEADERBOARD TAB -->
+                <div x-show="currentTab === 'leaderboard'" class="space-y-6">
+                    <div class="bg-dark-800 border border-dark-700 rounded-2xl overflow-hidden">
+                        <div class="px-6 py-4 border-b border-dark-700 flex justify-between items-center">
+                            <h3 class="text-base font-semibold text-white">Verified Indie Hacker Leaderboard</h3>
+                            <span class="text-xs text-gray-400">Updated live from Stripe</span>
+                        </div>
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-dark-700 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                    <th class="py-3 px-6">Rank & Founder</th>
+                                    <th class="py-3 px-6">Startup</th>
+                                    <th class="py-3 px-6">Verified MRR</th>
+                                    <th class="py-3 px-6">Tier Badge</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-dark-700 text-sm">
+                                <tr class="hover:bg-dark-700/50 transition">
+                                    <td class="py-4 px-6 flex items-center space-x-3">
+                                        <span class="font-bold text-accent-500">#1</span>
+                                        <span class="font-medium text-white">Arayan Ahmed</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-gray-300">Trove AI</td>
+                                    <td class="py-4 px-6 font-bold text-emerald-400">$12,450</td>
+                                    <td class="py-4 px-6"><span class="px-2.5 py-1 rounded-lg bg-indigo-500/10 text-indigo-400 text-xs font-semibold border border-indigo-500/20">$10k Club</span></td>
+                                </tr>
+                                <tr class="hover:bg-dark-700/50 transition">
+                                    <td class="py-4 px-6 flex items-center space-x-3">
+                                        <span class="font-bold text-gray-400">#2</span>
+                                        <span class="font-medium text-white">Sarah Jenkins</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-gray-300">ShipFast UI</td>
+                                    <td class="py-4 px-6 font-bold text-emerald-400">$28,900</td>
+                                    <td class="py-4 px-6"><span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 text-xs font-semibold border border-amber-500/20">$25k Club</span></td>
+                                </tr>
+                                <tr class="hover:bg-dark-700/50 transition">
+                                    <td class="py-4 px-6 flex items-center space-x-3">
+                                        <span class="font-bold text-gray-400">#3</span>
+                                        <span class="font-medium text-white">Marcus Vance</span>
+                                    </td>
+                                    <td class="py-4 px-6 text-gray-300">Mailscale</td>
+                                    <td class="py-4 px-6 font-bold text-emerald-400">$8,200</td>
+                                    <td class="py-4 px-6"><span class="px-2.5 py-1 rounded-lg bg-blue-500/10 text-blue-400 text-xs font-semibold border border-blue-500/20">$5k Club</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- PERKS CLUB TAB -->
+                <div x-show="currentTab === 'perks'" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-dark-800 border border-dark-700 rounded-2xl p-6 flex flex-col justify-between">
+                        <div>
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-semibold">Unlocked ($10k+ Tier)</span>
+                            <h4 class="text-lg font-bold text-white mt-4">AWS Activate</h4>
+                            <p class="text-sm text-gray-400 mt-2">$5,000 in free server credits for verified SaaS founders.</p>
+                        </div>
+                        <button class="mt-6 w-full bg-dark-700 hover:bg-dark-600 text-white py-2 rounded-xl text-xs font-semibold transition border border-dark-600">Claim Perk</button>
+                    </div>
+                    <div class="bg-dark-800 border border-dark-700 rounded-2xl p-6 flex flex-col justify-between">
+                        <div>
+                            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-semibold">Unlocked ($10k+ Tier)</span>
+                            <h4 class="text-lg font-bold text-white mt-4">Vercel Pro</h4>
+                            <p class="text-sm text-gray-400 mt-2">6 months free Pro hosting & team collaboration.</p>
+                        </div>
+                        <button class="mt-6 w-full bg-dark-700 hover:bg-dark-600 text-white py-2 rounded-xl text-xs font-semibold transition border border-dark-600">Claim Perk</button>
+                    </div>
+                    <div class="bg-dark-800 border border-dark-700 rounded-2xl p-6 flex flex-col justify-between opacity-75">
+                        <div>
+                            <span class="px-2.5 py-1 rounded-lg bg-gray-700 text-gray-400 text-xs font-semibold">Locked ($50k Tier)</span>
+                            <h4 class="text-lg font-bold text-white mt-4">Stripe Processing Waiver</h4>
+                            <p class="text-sm text-gray-400 mt-2">Zero fee on your next $50,000 in payment volume.</p>
+                        </div>
+                        <button disabled class="mt-6 w-full bg-dark-700/50 text-gray-500 py-2 rounded-xl text-xs font-semibold cursor-not-allowed">Locked</button>
+                    </div>
+                </div>
+
+                <!-- ANALYTICS TAB -->
+                <div x-show="currentTab === 'analytics'" class="bg-dark-800 border border-dark-700 rounded-2xl p-6 space-y-6">
+                    <h3 class="text-base font-semibold text-white">Revenue Growth Trajectory</h3>
+                    <div class="h-64 flex items-end justify-between space-x-4 pt-12 px-4 border-b border-dark-700">
+                        <div class="w-full bg-accent-500/20 hover:bg-accent-500/40 rounded-t-lg transition h-[30%] relative group">
+                            <span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition">$3.2k</span>
+                        </div>
+                        <div class="w-full bg-accent-500/35 hover:bg-accent-500/50 rounded-t-lg transition h-[50%] relative group">
+                            <span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition">$6.8k</span>
+                        </div>
+                        <div class="w-full bg-accent-500/60 hover:bg-accent-500/80 rounded-t-lg transition h-[75%] relative group">
+                            <span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition">$9.4k</span>
+                        </div>
+                        <div class="w-full bg-accent-500 rounded-t-lg transition h-[95%] relative group shadow-lg shadow-accent-500/30">
+                            <span class="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-white font-bold opacity-100">$12.4k</span>
+                        </div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-400 px-4">
+                        <span>July</span><span>August</span><span>September</span><span>October (Current)</span>
+                    </div>
+                </div>
+
+                <!-- SETTINGS TAB -->
+                <div x-show="currentTab === 'settings'" class="bg-dark-800 border border-dark-700 rounded-2xl p-6 space-y-6 max-w-2xl">
+                    <h3 class="text-base font-semibold text-white">Account & Stripe Integration</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Founder Name</label>
+                            <input type="text" value="Arayan Ahmed" class="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accent-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Startup Name</label>
+                            <input type="text" value="Trove AI" class="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accent-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-400 mb-1">Stripe Webhook Secret</label>
+                            <input type="password" value="whsec_xxxxxxxxxxxxxxxxxxxxx" class="w-full bg-dark-700 border border-dark-600 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-accent-500">
+                        </div>
+                        <button class="bg-accent-500 hover:bg-accent-600 text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition shadow-lg shadow-accent-500/25">Save Changes</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
     </div>
-    <script src="script.js"></script>
+
 </body>
 </html>
