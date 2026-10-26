@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Millio — Dashboard & App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#0b0f19] text-slate-100 font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 border-r border-slate-800 flex flex-col transition-transform duration-300 md:translate-x-0 -translate-x-full">
+            <div class="h-16 flex items-center px-6 border-b border-slate-800">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center">
+                        <i class="fa-solid fa-chart-line text-white"></i>
+                    </div>
+                    <span class="text-lg font-bold text-white tracking-tight">Millio</span>
+                </a>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-1.5 text-sm font-medium">
+                <button onclick="switchTab('dashboard')" class="w-full flex items-center px-3 py-2.5 rounded-xl bg-brand-600 text-white shadow-lg shadow-brand-600/20 nav-btn" data-tab="dashboard">
+                    <i class="fa-solid fa-house w-6"></i> Dashboard
+                </button>
+                <button onclick="switchTab('leaderboard')" class="w-full flex items-center px-3 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition nav-btn" data-tab="leaderboard">
+                    <i class="fa-solid fa-trophy w-6"></i> Leaderboard
+                </button>
+                <button onclick="switchTab('perks')" class="w-full flex items-center px-3 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition nav-btn" data-tab="perks">
+                    <i class="fa-solid fa-gift w-6"></i> Perks Club
+                </button>
+                <button onclick="switchTab('analytics')" class="w-full flex items-center px-3 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition nav-btn" data-tab="analytics">
+                    <i class="fa-solid fa-chart-pie w-6"></i> Analytics
+                </button>
+                <button onclick="switchTab('settings')" class="w-full flex items-center px-3 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition nav-btn" data-tab="settings">
+                    <i class="fa-solid fa-gear w-6"></i> Settings
+                </button>
+            </nav>
+            <div class="p-4 border-t border-slate-800">
+                <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-full bg-brand-600/30 flex items-center justify-center font-bold text-brand-300 text-sm">AR</div>
+                    <div class="overflow-hidden">
+                        <div class="text-xs font-semibold text-white truncate">Arayan</div>
+                        <div class="text-[10px] text-emerald-400 truncate"><i class="fa-solid fa-circle text-[8px] mr-1"></i> Stripe Connected</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col md:pl-64 overflow-y-auto">
+            <header class="h-16 bg-slate-900/60 backdrop-blur-md border-b border-slate-800 flex items-center justify-between px-6 sticky top-0 z-40">
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleSidebar()" class="md:hidden text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                    <h1 id="page-title" class="text-base font-semibold text-white">Dashboard Overview</h1>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="px-3 py-1.5 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition">Back to Landing</a>
+                </div>
+            </header>
+
+            <main class="p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6">
+                <!-- Dashboard View -->
+                <div id="view-dashboard" class="space-y-6 view-section">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                            <div class="text-xs text-slate-400 font-medium">Verified MRR</div>
+                            <div class="text-2xl font-bold text-white mt-1">$12,450</div>
+                            <div class="text-xs text-emerald-400 mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +12% this month</div>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                            <div class="text-xs text-slate-400 font-medium">Active Milestone</div>
+                            <div class="text-2xl font-bold text-white mt-1">$10k MRR Club</div>
+                            <div class="text-xs text-brand-400 mt-2"><i class="fa-solid fa-shield-check"></i> Badge Unlocked</div>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                            <div class="text-xs text-slate-400 font-medium">Perks Claimed</div>
+                            <div class="text-2xl font-bold text-white mt-1">6 / 12</div>
+                            <div class="text-xs text-indigo-400 mt-2"><i class="fa-solid fa-gift"></i> $4,200 value saved</div>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl">
+                            <div class="text-xs text-slate-400 font-medium">Global Rank</div>
+                            <div class="text-2xl font-bold text-white mt-1">#42</div>
+                            <div class="text-xs text-emerald-400 mt-2"><i class="fa-solid fa-trophy"></i> Top 5% founders</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard View -->
+                <div id="view-leaderboard" class="space-y-6 view-section hidden">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                        <h2 class="text-lg font-bold text-white mb-4">Verified Indie Hacker Leaderboard</h2>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-4 bg-slate-950 rounded-xl border border-slate-800">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-lg font-bold text-brand-400">#1</span>
+                                    <div>
+                                        <div class="text-sm font-semibold text-white">SaaSFlow</div>
+                                        <div class="text-xs text-slate-400">Verified via Stripe</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-bold text-emerald-400">$84,200 MRR</div>
+                                    <div class="text-xs text-slate-400">$100k Club</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-slate-950 rounded-xl border border-slate-800">
+                                <div class="flex items-center space-x-4">
+                                    <span class="text-lg font-bold text-slate-400">#2</span>
+                                    <div>
+                                        <div class="text-sm font-semibold text-white">Trove AI</div>
+                                        <div class="text-xs text-slate-400">Verified via Stripe</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-sm font-bold text-emerald-400">$12,450 MRR</div>
+                                    <div class="text-xs text-brand-400">$10k Club</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Perks Club View -->
+                <div id="view-perks" class="space-y-6 view-section hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center font-bold text-lg mb-4">AWS</div>
+                                <h3 class="text-base font-bold text-white">AWS Activate Credits</h3>
+                                <p class="text-xs text-slate-400 mt-2">Get up to $5,000 in free cloud credits for verified startups.</p>
+                            </div>
+                            <button class="mt-6 w-full py-2.5 bg-brand-600 hover:bg-brand-500 text-xs font-semibold text-white rounded-xl transition">Claim Perk</button>
+                        </div>
+                        <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center font-bold text-lg mb-4">V</div>
+                                <h3 class="text-base font-bold text-white">Vercel Pro 3 Months</h3>
+                                <p class="text-xs text-slate-400 mt-2">Free Vercel Pro team tier for scaling indie apps.</p>
+                            </div>
+                            <button class="mt-6 w-full py-2.5 bg-brand-600 hover:bg-brand-500 text-xs font-semibold text-white rounded-xl transition">Claim Perk</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics View -->
+                <div id="view-analytics" class="space-y-6 view-section hidden">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                        <h2 class="text-lg font-bold text-white mb-2">Growth & Revenue Analytics</h2>
+                        <p class="text-xs text-slate-400">Stripe webhook sync active. Real-time data streams.</p>
+                        <div class="mt-6 h-64 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-center text-slate-500 text-sm">
+                            [ Interactive MRR Growth Chart Active ]
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings View -->
+                <div id="view-settings" class="space-y-6 view-section hidden">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-2xl">
+                        <h2 class="text-lg font-bold text-white mb-4">Account & Stripe Settings</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Founder Name</label>
+                                <input type="text" value="Arayan" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-brand-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Stripe Account ID</label>
+                                <input type="text" value="acct_1Mxxxxxxxxxxxxxx" disabled class="w-full bg-slate-950/50 border border-slate-800/60 rounded-xl px-4 py-2.5 text-sm text-slate-500">
+                            </div>
+                            <button class="px-5 py-2.5 bg-brand-600 hover:bg-brand-500 text-xs font-semibold text-white rounded-xl transition">Save Changes</button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-600/20');
+                btn.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/60');
+            });
+            const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+            activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-600/20');
+            activeBtn.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800/60');
+
+            document.getElementById('page-title').innerText = tabId.charAt(0).toUpperCase() + tabId.slice(1) + (tabId === 'dashboard' ? ' Overview' : '');
+            if (window.innerWidth < 768) toggleSidebar();
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+    </script>
+</body>
+</html>
